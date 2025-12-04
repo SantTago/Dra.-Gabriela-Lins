@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LOGO_URL } from '../constants';
+import { LOGO_URL } from '../constants.ts';
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IMAGES } from '../constants';
+import { IMAGES } from '../constants.ts';
 import { X, ZoomIn } from 'lucide-react';
 
 const Gallery: React.FC = () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TREATMENTS } from '../constants';
+import { TREATMENTS } from '../constants.ts';
 
 const Timeline: React.FC = () => {
   return (

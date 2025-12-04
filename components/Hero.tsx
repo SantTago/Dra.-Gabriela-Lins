@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IMAGES } from '../constants';
+import { IMAGES } from '../constants.ts';
 import { ArrowRight } from 'lucide-react';
 
 const Hero: React.FC = () => {

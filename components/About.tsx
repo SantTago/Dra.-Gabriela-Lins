@@ -1,5 +1,5 @@
 import React from 'react';
-import { IMAGES } from '../constants';
+import { IMAGES } from '../constants.ts';
 
 const About: React.FC = () => {
   const aboutImage = IMAGES.gallery[0]; 

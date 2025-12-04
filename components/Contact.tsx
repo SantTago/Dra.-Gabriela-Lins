@@ -1,6 +1,6 @@
 import React from 'react';
 import { Instagram, MessageCircle } from 'lucide-react';
-import { INSTAGRAM_URL, WHATSAPP_URL, LOGO_URL } from '../constants';
+import { INSTAGRAM_URL, WHATSAPP_URL, LOGO_URL } from '../constants.ts';
 
 const Contact: React.FC = () => {
   return (
