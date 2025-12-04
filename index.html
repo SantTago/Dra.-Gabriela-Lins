@@ -4,14 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dra. Gabriela Lins - Osteopatia Pediátrica</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     
-    <!-- Babel Standalone for in-browser transpilation (GitHub Pages support) -->
+    <!-- Babel Standalone (for JSX) -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+    <!-- Tailwind Config -->
     <script>
       tailwind.config = {
         theme: {
@@ -42,8 +47,8 @@
         }
       }
     </script>
+
     <style>
-      /* Smooth scrolling for anchor links */
       html {
         scroll-behavior: smooth;
       }
@@ -55,21 +60,632 @@
         scrollbar-width: none;
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.1/",
-    "react": "https://aistudiocdn.com/react@^19.2.1",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0"
-  }
-}
-</script>
+
+    <!-- Import Map for Modules -->
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.2.0",
+        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+        "lucide-react": "https://esm.sh/lucide-react@0.263.1"
+      }
+    }
+    </script>
 </head>
-  <body class="bg-white text-brand-text antialiased">
+<body class="bg-white text-brand-text antialiased">
     <div id="root"></div>
-    
-    <!-- Entry Point for the React Application -->
-    <script type="text/babel" data-type="module" src="./index.tsx"></script>
-  </body>
+
+    <!-- MAIN APPLICATION SCRIPT -->
+    <script type="text/babel" data-type="module">
+      import React, { useState, useEffect, useRef } from 'react';
+      import ReactDOM from 'react-dom/client';
+      import { 
+        FileText, Heart, Brain, Smile, Baby, CheckCircle, 
+        ArrowRight, Play, Pause, Volume2, VolumeX, ZoomIn, 
+        X, ChevronLeft, ChevronRight, MessageCircle, Instagram, Star 
+      } from 'lucide-react';
+
+      // --- CONSTANTS & DATA ---
+
+      const LOGO_URL = "https://i.ibb.co/v6Hsgt3t/IMG-5238.png";
+      const INSTAGRAM_URL = "https://www.instagram.com/gabiosteopatia/";
+      const WHATSAPP_URL = "https://wa.me/5599981234344";
+
+      const IMAGES = {
+        hero: "https://i.ibb.co/kVkggkCN/Whats-App-Image-2025-12-03-at-21-04-58.jpg",
+        gallery: [
+          "https://i.ibb.co/jktXT5YL/Whats-App-Image-2025-12-03-at-21-04-57-5.jpg",
+          "https://i.ibb.co/W4kJBNmZ/Whats-App-Image-2025-12-03-at-21-04-57-4.jpg",
+          "https://i.ibb.co/cXwR8D6N/Whats-App-Image-2025-12-03-at-21-04-57-3.jpg",
+          "https://i.ibb.co/p6B3FnMk/Whats-App-Image-2025-12-03-at-21-04-57-2.jpg",
+          "https://i.ibb.co/Ps3gBj3w/Whats-App-Image-2025-12-03-at-21-04-57-1.jpg",
+          "https://i.ibb.co/C5q2LrvD/Whats-App-Image-2025-12-03-at-21-04-57.jpg",
+          "https://i.ibb.co/Wvy2rDVv/Whats-App-Image-2025-12-03-at-21-04-56-4.jpg",
+          "https://i.ibb.co/N6ZwMFf3/Whats-App-Image-2025-12-03-at-21-04-56-3.jpg",
+          "https://i.ibb.co/c50mrYx/Whats-App-Image-2025-12-03-at-21-04-56-2.jpg",
+          "https://i.ibb.co/0ynM8dF3/Whats-App-Image-2025-12-03-at-21-04-56-1.jpg",
+          "https://i.ibb.co/0jCrQd4h/Whats-App-Image-2025-12-03-at-21-04-56.jpg",
+          "https://i.ibb.co/RGHL7bY5/Whats-App-Image-2025-12-03-at-21-04-07-3.jpg",
+          "https://i.ibb.co/8LttmGtP/Whats-App-Image-2025-12-03-at-21-04-07-2.jpg",
+          "https://i.ibb.co/rGXdspgC/Whats-App-Image-2025-12-03-at-21-04-07-1.jpg",
+          "https://i.ibb.co/KjJvvzrF/Whats-App-Image-2025-12-03-at-21-04-07.jpg"
+        ]
+      };
+
+      const TREATMENTS = [
+        {
+          icon: Brain,
+          title: "Assimetria Craniana",
+          description: "Correção de deformidades posicionais na cabeça do bebê, prevenindo problemas futuros."
+        },
+        {
+          icon: Baby,
+          title: "Torcicolo Congênito",
+          description: "Tratamento suave para melhorar a mobilidade do pescoço e aliviar tensões musculares."
+        },
+        {
+          icon: Smile,
+          title: "Refluxo e Cólicas",
+          description: "Técnicas viscerais que ajudam a melhorar a digestão e o conforto do bebê."
+        },
+        {
+          icon: CheckCircle,
+          title: "Dificuldades de Sucção",
+          description: "Ajustes que facilitam a amamentação, melhorando a pega e o relaxamento."
+        },
+        {
+          icon: FileText,
+          title: "Disquesia",
+          description: "Auxílio no funcionamento intestinal e alívio do desconforto ao evacuar."
+        },
+        {
+          icon: Heart,
+          title: "Acompanhamento do Desenvolvimento",
+          description: "Monitoramento dos marcos motores para garantir um crescimento saudável."
+        }
+      ];
+
+      const VIDEOS = [
+        {
+          id: 1,
+          poster: "https://images.unsplash.com/photo-1544126566-475a1062b183?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          title: "Cólicas em Bebês"
+        },
+        {
+          id: 2,
+          poster: "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          title: "Dicas de Sono"
+        },
+        {
+          id: 3,
+          poster: "https://images.unsplash.com/photo-1519689680058-324335c77eba?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          title: "Desenvolvimento Motor"
+        },
+        {
+          id: 4,
+          poster: "https://images.unsplash.com/photo-1594824476961-b7aa59a941e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          title: "Amamentação Tranquila"
+        }
+      ];
+
+      // --- COMPONENTS ---
+
+      const Header = () => {
+        const [isScrolled, setIsScrolled] = useState(false);
+
+        useEffect(() => {
+          const handleScroll = () => {
+            setIsScrolled(window.scrollY > 20);
+          };
+          window.addEventListener('scroll', handleScroll);
+          return () => window.removeEventListener('scroll', handleScroll);
+        }, []);
+
+        const scrollToContact = () => {
+          const element = document.getElementById('contato');
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        };
+
+        return (
+          <header 
+            className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+              isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-2' : 'bg-transparent py-6'
+            }`}
+          >
+            <div className="container mx-auto px-6 flex justify-between items-center">
+              {/* Logo Image */}
+              <a href="#" className="flex items-center focus:outline-none group">
+                <img 
+                  src={LOGO_URL} 
+                  alt="Dra. Gabriela Lins - Osteopatia Pediátrica" 
+                  className={`h-auto w-auto object-contain transition-all duration-300 ${
+                    isScrolled ? 'max-h-12' : 'max-h-16 md:max-h-20'
+                  }`}
+                />
+              </a>
+
+              {/* CTA Button */}
+              <button 
+                onClick={scrollToContact}
+                className="bg-brand-pink hover:bg-pink-600 text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              >
+                Agende Agora
+              </button>
+            </div>
+          </header>
+        );
+      };
+
+      const Hero = () => {
+        // Use hero image plus first 5 gallery images for the carousel
+        const carouselImages = [IMAGES.hero, ...IMAGES.gallery.slice(0, 5)];
+        const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+        useEffect(() => {
+          const timer = setInterval(() => {
+            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % carouselImages.length);
+          }, 5000); // Change image every 5 seconds
+
+          return () => clearInterval(timer);
+        }, [carouselImages.length]);
+
+        const scrollToContact = () => {
+          document.getElementById('contato')?.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        const scrollToAbout = () => {
+          document.getElementById('sobre')?.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        return (
+          <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+            {/* Background Image Carousel Area */}
+            <div className="absolute inset-0 z-0 bg-gray-100">
+              {carouselImages.map((imgSrc, index) => (
+                <div
+                  key={index}
+                  className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                    index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+                  }`}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-transparent/10 z-10 md:w-3/4"></div>
+                  <img 
+                    src={imgSrc} 
+                    alt={`Slide ${index}`} 
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Content */}
+            <div className="container mx-auto px-6 relative z-20">
+              <div className="max-w-2xl">
+                <div className="inline-block bg-brand-green/10 text-brand-green px-4 py-1 rounded-full text-sm font-semibold tracking-wider mb-6 backdrop-blur-sm">
+                  CUIDADO ESPECIALIZADO
+                </div>
+                <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 leading-tight mb-6 drop-shadow-sm">
+                  O toque que seu <span className="text-brand-pink">bebê</span> precisa para crescer feliz.
+                </h1>
+                <p className="text-lg md:text-xl text-gray-700 mb-8 font-light leading-relaxed border-l-4 border-brand-green pl-4 bg-white/50 backdrop-blur-sm p-4 rounded-r-lg">
+                  "Com toque e amor de mãe, ajudo o seu bebê a viver livre de tensões!"
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button 
+                    onClick={scrollToContact}
+                    className="group bg-brand-pink hover:bg-pink-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                  >
+                    Agende sua Consulta
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                  <button 
+                    onClick={scrollToAbout}
+                    className="bg-white/90 hover:bg-white text-gray-800 border border-gray-200 px-8 py-4 rounded-full text-lg font-semibold transition-all flex items-center justify-center backdrop-blur-sm shadow-sm"
+                  >
+                    Saiba Mais
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const About = () => {
+        const aboutImage = IMAGES.gallery[0]; 
+
+        return (
+          <section id="sobre" className="py-32 bg-brand-gray/50">
+            <div className="container mx-auto px-6">
+              <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-24">
+                
+                {/* Image Side */}
+                <div className="w-full md:w-1/2 relative">
+                  <div className="absolute -top-4 -left-4 w-24 h-24 bg-brand-pink/20 rounded-full blur-2xl"></div>
+                  <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-brand-green/20 rounded-full blur-3xl"></div>
+                  <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl aspect-[3/4] transform hover:scale-[1.01] transition-transform duration-700">
+                    <img 
+                      src={aboutImage} 
+                      alt="Dra. Gabriela Lins" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  {/* Floating Card */}
+                  <div className="absolute bottom-10 -right-6 md:-right-10 bg-white p-6 rounded-2xl shadow-xl max-w-xs hidden lg:block border border-gray-100 animate-float">
+                    <p className="font-serif italic text-gray-700 text-lg">"Cada bebê é um universo único que merece ser compreendido com amor."</p>
+                  </div>
+                </div>
+
+                {/* Text Side */}
+                <div className="w-full md:w-1/2">
+                  <h2 className="text-brand-pink font-bold uppercase tracking-widest text-sm mb-4">Sobre Mim</h2>
+                  <h3 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 mb-8 leading-tight">
+                    Dra. Gabriela Lins
+                  </h3>
+                  <div className="space-y-6 text-lg text-gray-600 font-light leading-relaxed">
+                    <p>
+                      Olá! Sou Fisioterapeuta e especializada em <strong className="font-semibold text-brand-green">Osteopatia Pediátrica</strong>. Minha jornada profissional sempre foi guiada pelo desejo de proporcionar bem-estar desde os primeiros dias de vida.
+                    </p>
+                    <p>
+                      Acredito profundamente que o tratamento vai além da técnica; ele exige conexão. Minha filosofia de trabalho une o rigor científico da fisioterapia com o que chamo de <strong className="font-semibold text-brand-pink">"toque e amor de mãe"</strong>.
+                    </p>
+                    <p>
+                      Entendo as angústias dos pais quando o bebê chora por desconforto ou apresenta dificuldades no desenvolvimento. Meu objetivo é acolher sua família e devolver a tranquilidade ao seu lar através de mãos gentis e experientes.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-8 mt-10">
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-brand-green hover:shadow-md transition-shadow">
+                      <span className="block font-bold text-3xl text-brand-green mb-1">+500</span>
+                      <span className="text-sm text-gray-500 uppercase tracking-wide">Bebês atendidos</span>
+                    </div>
+                    <div className="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-brand-pink hover:shadow-md transition-shadow">
+                      <span className="block font-bold text-3xl text-brand-pink mb-1">100%</span>
+                      <span className="text-sm text-gray-500 uppercase tracking-wide">Dedicação</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Timeline = () => {
+        return (
+          <section id="tratamentos" className="py-32 bg-brand-gray relative overflow-hidden">
+            {/* Background Decorative Blobs */}
+            <div className="absolute top-0 left-0 w-64 h-64 bg-brand-pink/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 animate-float"></div>
+            <div className="absolute bottom-0 right-0 w-96 h-96 bg-brand-green/5 rounded-full blur-3xl translate-x-1/3 translate-y-1/3 animate-float" style={{ animationDelay: '2s' }}></div>
+
+            <div className="container mx-auto px-6 relative z-10">
+              <div className="text-center max-w-3xl mx-auto mb-24">
+                <h2 className="text-brand-pink font-bold uppercase tracking-widest text-sm mb-3">Jornada do Cuidado</h2>
+                <h3 className="font-serif text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                  Acompanhando cada fase do seu bebê
+                </h3>
+                <p className="text-gray-600 text-lg">
+                  Um caminho suave e cheio de amor para resolver as tensões e garantir um desenvolvimento feliz.
+                </p>
+              </div>
+
+              <div className="relative">
+                {/* The Central Line (Desktop) / Left Line (Mobile) */}
+                <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-brand-pink via-brand-green to-brand-pink md:-translate-x-1/2 rounded-full opacity-30 border-l-2 border-dashed border-gray-400"></div>
+
+                <div className="space-y-16 md:space-y-32">
+                  {TREATMENTS.map((item, index) => {
+                    const Icon = item.icon;
+                    const isEven = index % 2 === 0;
+                    
+                    return (
+                      <div key={index} className={`relative flex items-center md:justify-between ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+                        
+                        {/* Content Card */}
+                        <div className={`ml-24 md:ml-0 md:w-5/12 ${isEven ? 'md:text-right' : 'md:text-left'}`}>
+                          <div className="group bg-white p-8 md:p-10 rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-50 hover:border-brand-pink/20 transform hover:-translate-y-2 relative overflow-hidden">
+                            {/* Decorative corner blob */}
+                            <div className={`absolute -top-10 -right-10 w-32 h-32 rounded-full opacity-10 transition-transform duration-700 group-hover:scale-150 ${isEven ? 'bg-brand-pink' : 'bg-brand-green'}`}></div>
+                            
+                            <h4 className={`font-serif text-2xl font-bold text-gray-900 mb-4 group-hover:text-brand-pink transition-colors`}>
+                              {item.title}
+                            </h4>
+                            <p className="text-gray-600 leading-relaxed relative z-10 text-lg">
+                              {item.description}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Center Node / Icon */}
+                        <div className="absolute left-8 md:left-1/2 -translate-x-1/2 flex items-center justify-center">
+                          <div className={`w-14 h-14 md:w-20 md:h-20 rounded-full border-4 border-white shadow-xl flex items-center justify-center z-10 transition-transform duration-300 hover:scale-110 ${isEven ? 'bg-brand-pink' : 'bg-brand-green'}`}>
+                            <Icon className="w-6 h-6 md:w-9 md:h-9 text-white animate-pulse-slow" />
+                          </div>
+                        </div>
+
+                        {/* Empty Spacer for Desktop balance */}
+                        <div className="hidden md:block md:w-5/12"></div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* End of Path Decoration */}
+                <div className="absolute -bottom-8 left-8 md:left-1/2 -translate-x-1/2 w-4 h-4 bg-brand-text rounded-full opacity-20"></div>
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Gallery = () => {
+        const [selectedImage, setSelectedImage] = useState(null);
+        const galleryImages = IMAGES.gallery.slice(1, 13);
+
+        useEffect(() => {
+          const handleEsc = (e) => {
+            if (e.key === 'Escape') setSelectedImage(null);
+          };
+          window.addEventListener('keydown', handleEsc);
+          return () => window.removeEventListener('keydown', handleEsc);
+        }, []);
+
+        return (
+          <section id="galeria" className="py-32 bg-white relative">
+            <div className="container mx-auto px-6">
+              <div className="text-center mb-20">
+                <h2 className="text-brand-pink font-bold uppercase tracking-widest text-sm mb-3">Resultados Reais</h2>
+                <h3 className="font-serif text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                  Momentos
+                </h3>
+                <p className="text-gray-500 italic text-lg">Um pouco do nosso dia a dia no consultório.</p>
+              </div>
+
+              <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+                {galleryImages.map((src, index) => (
+                  <div 
+                    key={index} 
+                    className="break-inside-avoid relative group rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer"
+                    onClick={() => setSelectedImage(src)}
+                  >
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                      <ZoomIn className="text-white w-10 h-10 transform scale-50 group-hover:scale-100 transition-transform duration-300" />
+                    </div>
+                    <img 
+                      src={src} 
+                      alt={`Atendimento Dra Gabriela ${index + 1}`} 
+                      className="w-full h-auto object-cover transform group-hover:scale-110 transition-transform duration-700"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+              
+              <div className="mt-16 text-center">
+                <a 
+                  href="https://www.instagram.com/gabiosteopatia/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-brand-pink font-semibold hover:text-brand-green transition-colors text-lg tracking-wide"
+                >
+                  Ver mais no Instagram &rarr;
+                </a>
+              </div>
+            </div>
+
+            {/* Lightbox Modal */}
+            {selectedImage && (
+              <div 
+                className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300"
+                onClick={() => setSelectedImage(null)}
+              >
+                <button 
+                  className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors bg-white/10 hover:bg-white/20 p-2 rounded-full backdrop-blur-md"
+                  onClick={() => setSelectedImage(null)}
+                >
+                  <X size={32} />
+                </button>
+                <img 
+                  src={selectedImage} 
+                  alt="Visualização em tela cheia" 
+                  className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl animate-in zoom-in-95 duration-300"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </div>
+            )}
+          </section>
+        );
+      };
+
+      const VideoCarousel = () => {
+        const scrollContainerRef = useRef(null);
+
+        const scroll = (direction) => {
+          if (scrollContainerRef.current) {
+            const scrollAmount = 300;
+            scrollContainerRef.current.scrollBy({
+              left: direction === 'right' ? scrollAmount : -scrollAmount,
+              behavior: 'smooth'
+            });
+          }
+        };
+
+        return (
+          <section className="py-32 bg-brand-gray relative overflow-hidden">
+            <div className="container mx-auto px-6">
+              <div className="flex justify-between items-end mb-16">
+                <div className="max-w-xl">
+                  <h2 className="text-brand-pink font-bold uppercase tracking-widest text-sm mb-3">Conteúdos Educativos</h2>
+                  <h3 className="font-serif text-4xl md:text-5xl font-bold text-gray-900">
+                    Dicas da Dra. Gabriela
+                  </h3>
+                </div>
+                <div className="hidden md:flex gap-4">
+                  <button 
+                    onClick={() => scroll('left')}
+                    className="p-4 rounded-full border border-gray-300 hover:bg-white hover:shadow-lg transition-all"
+                  >
+                    <ChevronLeft className="w-6 h-6 text-gray-600" />
+                  </button>
+                  <button 
+                    onClick={() => scroll('right')}
+                    className="p-4 rounded-full border border-gray-300 hover:bg-white hover:shadow-lg transition-all"
+                  >
+                    <ChevronRight className="w-6 h-6 text-gray-600" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Carousel Container */}
+              <div 
+                ref={scrollContainerRef}
+                className="flex overflow-x-auto gap-8 pb-12 -mx-6 px-6 md:mx-0 md:px-0 snap-x snap-mandatory hide-scrollbar"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {VIDEOS.map((video) => (
+                  <div 
+                    key={video.id} 
+                    className="flex-none w-[280px] md:w-[340px] aspect-[9/16] relative rounded-[2rem] overflow-hidden shadow-xl group cursor-pointer snap-center bg-black transition-transform hover:-translate-y-2 duration-300"
+                  >
+                    <img 
+                      src={video.poster} 
+                      alt={video.title} 
+                      className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-500 transform group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                    
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <Play className="w-10 h-10 text-white ml-1" fill="white" />
+                      </div>
+                    </div>
+
+                    <div className="absolute bottom-8 left-8 right-8">
+                      <p className="text-white font-serif text-2xl font-bold leading-tight">
+                        {video.title}
+                      </p>
+                      <span className="text-white/80 text-sm mt-3 block font-medium">Assistir Vídeo &rarr;</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Contact = () => {
+        return (
+          <section id="contato" className="py-24 bg-white relative overflow-hidden">
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-brand-pink/5 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-brand-green/5 rounded-full blur-3xl"></div>
+            
+            <div className="container mx-auto px-6 relative z-10">
+              
+              {/* Section Header */}
+              <div className="text-center mb-8">
+                <h2 className="text-brand-green font-bold uppercase tracking-widest text-sm mb-3">Contato</h2>
+                <h3 className="font-serif text-3xl md:text-4xl font-bold text-gray-900">
+                  Agende sua Consulta
+                </h3>
+              </div>
+
+              <div className="max-w-2xl mx-auto flex flex-col items-center text-center">
+                
+                {/* Logo Section */}
+                <div className="mb-12 p-8 rounded-full bg-brand-gray/30 shadow-inner animate-float">
+                   <img 
+                     src={LOGO_URL} 
+                     alt="Dra. Gabriela Lins - Logo" 
+                     className="h-32 md:h-40 w-auto object-contain"
+                   />
+                </div>
+
+                <p className="text-gray-600 text-lg mb-10 max-w-lg">
+                  Entre em contato para agendar uma avaliação ou tirar suas dúvidas. Estou aqui para acolher sua família.
+                </p>
+                
+                {/* Action Buttons */}
+                <div className="w-full grid md:grid-cols-2 gap-6">
+                  <a 
+                    href={WHATSAPP_URL} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center justify-center gap-4 p-6 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 group"
+                  >
+                    <div className="bg-white/20 p-2 rounded-full">
+                      <MessageCircle className="w-8 h-8 text-white" />
+                    </div>
+                    <div className="text-left">
+                      <span className="block text-xs uppercase tracking-wider font-semibold opacity-90">WhatsApp</span>
+                      <span className="block font-bold text-xl">+55 (99) 98123-4344</span>
+                    </div>
+                  </a>
+
+                  <a 
+                    href={INSTAGRAM_URL} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center justify-center gap-4 p-6 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 group"
+                  >
+                    <div className="bg-white/20 p-2 rounded-full">
+                      <Instagram className="w-8 h-8 text-white" />
+                    </div>
+                    <div className="text-left">
+                      <span className="block text-xs uppercase tracking-wider font-semibold opacity-90">Instagram</span>
+                      <span className="block font-bold text-xl">@gabiosteopatia</span>
+                    </div>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Footer = () => {
+        return (
+          <footer className="bg-gray-900 text-white py-12">
+            <div className="container mx-auto px-6 text-center">
+              <h3 className="font-serif text-2xl font-bold mb-4">Dra. Gabriela Lins</h3>
+              <p className="text-gray-400 mb-8 max-w-md mx-auto">
+                Cuidado especializado com toque e amor de mãe. Proporcionando saúde e bem-estar para o seu maior tesouro.
+              </p>
+              <div className="border-t border-gray-800 pt-8 text-sm text-gray-500">
+                <p>&copy; {new Date().getFullYear()} Dra. Gabriela Lins. Todos os direitos reservados.</p>
+              </div>
+            </div>
+          </footer>
+        );
+      };
+
+      const App = () => {
+        return (
+          <div className="font-sans text-brand-text bg-white flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-grow">
+              <Hero />
+              <About />
+              <Timeline />
+              <Gallery />
+              <VideoCarousel />
+              <Contact />
+            </main>
+            <Footer />
+          </div>
+        );
+      }
+
+      // --- ROOT RENDER ---
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      );
+    </script>
+</body>
 </html>
